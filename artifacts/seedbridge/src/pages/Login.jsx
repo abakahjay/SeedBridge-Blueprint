@@ -72,6 +72,14 @@ function LoginPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
+                {/* Hosted by the backend; resets work for accounts that have an email on file */}
+                <a
+                  href={`${import.meta.env.VITE_API_URL || "https://fullbackendd.onrender.com"}/forgotPassword?app=seedbridge&return=${encodeURIComponent(window.location.href)}`}
+                  className="text-sm text-primary hover:underline"
+                  title="Needs the email address on your account"
+                >
+                  Forgot password?
+                </a>
               </div>
               <Input
     id="password"
