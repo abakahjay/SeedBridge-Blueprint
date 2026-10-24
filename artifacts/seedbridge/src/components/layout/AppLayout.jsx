@@ -65,6 +65,12 @@ function AppLayout({ children }) {
         {children}
       </main>
 
+      <footer className="border-t px-4 pt-6 pb-24 md:pb-6 text-center text-sm text-muted-foreground">
+        <Link href="/terms" className="hover:text-foreground">Terms of Use</Link>
+        <span className="mx-2">·</span>
+        <Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link>
+      </footer>
+
       {
     /* Mobile bottom nav */
   }

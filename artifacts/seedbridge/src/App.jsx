@@ -19,6 +19,7 @@ import { FarmerListings } from "@/pages/FarmerListings";
 import { NewListing } from "@/pages/NewListing";
 import { FreshRescue } from "@/pages/FreshRescue";
 import { PreHarvest } from "@/pages/PreHarvest";
+import { LegalPage } from "@/pages/Legal";
 import NotFound from "@/pages/not-found";
 const queryClient = new QueryClient();
 function Router() {
@@ -31,6 +32,8 @@ function Router() {
         
         <Route path="/produce/:id" component={ProduceDetail} />
         <Route path="/payment/callback" component={PaymentCallback} />
+        <Route path="/privacy"><LegalPage page="privacy" /></Route>
+        <Route path="/terms"><LegalPage page="terms" /></Route>
         
         <Route path="/farmer/dashboard">
           <ProtectedRoute allowedRoles={["farmer"]}><FarmerDashboard /></ProtectedRoute>

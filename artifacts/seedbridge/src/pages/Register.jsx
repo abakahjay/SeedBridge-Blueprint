@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRegister } from "@workspace/api-client-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button, Input, Label, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui";
 import { useToast } from "@/hooks/use-toast";
 import { Sprout } from "lucide-react";
@@ -12,6 +13,7 @@ function RegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
+    email: "",
     password: "",
     role: initialRole,
     region: "Eastern Region"
@@ -19,12 +21,21 @@ function RegisterPage() {
   const { login } = useAuth();
   const { toast } = useToast();
   const registerMutation = useRegister();
+  const [agreed, setAgreed] = useState(false); // 18+ and terms, required before an account is created
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.phone || !formData.password) {
+    if (!formData.name || !formData.phone || !formData.email || !formData.password) {
       toast({
         title: "Missing Fields",
         description: "Please fill out all required fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+    if (!agreed) {
+      toast({
+        title: "Please confirm",
+        description: "You must be 18 or older and agree to the terms to create an account.",
         variant: "destructive"
       });
       return;
@@ -108,6 +119,21 @@ function RegisterPage() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+    id="email"
+    type="email"
+    autoComplete="email"
+    placeholder="you@example.com"
+    value={formData.email}
+    onChange={handleChange}
+    className="text-lg py-6"
+    disabled={registerMutation.isPending}
+  />
+              <p className="text-sm text-muted-foreground">Used to reset your password if you forget it.</p>
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="region">Region</Label>
               <Select
     value={formData.region}
@@ -137,6 +163,14 @@ function RegisterPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 pt-4">
+            <label className="flex w-full items-start gap-3 text-sm text-muted-foreground cursor-pointer" data-testid="label-consent">
+              <Checkbox checked={agreed} onCheckedChange={(v) => setAgreed(v === true)} className="mt-0.5" data-testid="checkbox-consent" />
+              <span>
+                I&apos;m 18 or older and agree to the{" "}
+                <Link href="/terms" className="text-primary font-semibold hover:underline">Terms of Use</Link> and{" "}
+                <Link href="/privacy" className="text-primary font-semibold hover:underline">Privacy Policy</Link>.
+              </span>
+            </label>
             <Button
     type="submit"
     className="w-full text-lg h-14"
